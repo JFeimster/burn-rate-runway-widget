@@ -9,13 +9,13 @@
   <link rel="canonical" href="https://burn-rate-runway-widget.vercel.app/landing.html" />
 
   <meta property="og:title" content="Burn Rate Runway Extender | Startup Runway Calculator" />
-  <meta property="og:description" content="A fast runway calculator for founders who need to know how long their cash will last before the room gets smaller." />
+  <meta property="og:description" content="A fast startup runway calculator for founders who need to know how long their cash will last before the room gets smaller." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://burn-rate-runway-widget.vercel.app/landing.html" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Burn Rate Runway Extender | Startup Runway Calculator" />
-  <meta name="twitter:description" content="Estimate your startup runway, understand monthly burn, and review funding options before cash pressure removes your choices." />
+  <meta name="twitter:description" content="Estimate startup runway, understand monthly burn, and review funding options before cash pressure removes your choices." />
 
   <title>Burn Rate Runway Extender | Startup Runway Calculator</title>
 
@@ -66,40 +66,45 @@
     }
 
     :root {
-      --ink: #111111;
-      --paper: #fff8e7;
+      --ink: #101010;
+      --paper: #fff4d8;
+      --paper-2: #f5ead5;
       --card: #ffffff;
-      --muted: #5f5a52;
-      --line: #111111;
+      --muted: #4f4a42;
+      --line: #101010;
       --danger: #f04d37;
-      --warning: #ffbf1f;
-      --good: #20b15a;
-      --shadow: 8px 8px 0 #111111;
-      --radius: 24px;
+      --warning: #ffc21a;
+      --blue: #1e63ff;
+      --green: #1fbf75;
+      --shadow: 9px 9px 0 #101010;
+      --shadow-small: 5px 5px 0 #101010;
+      --radius: 26px;
     }
 
     html,
     body {
       margin: 0;
       padding: 0;
-      background:
-        radial-gradient(circle at 12% 0%, rgba(255, 191, 31, 0.35), transparent 30%),
-        linear-gradient(135deg, #fff8e7 0%, #f1e5d2 100%);
       color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(255, 194, 26, 0.42), transparent 25%),
+        radial-gradient(circle at 95% 10%, rgba(30, 99, 255, 0.12), transparent 24%),
+        linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 100%);
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
     body {
-      padding: clamp(16px, 3vw, 34px);
+      padding: clamp(14px, 2.8vw, 34px);
     }
 
     main {
-      max-width: 1120px;
+      max-width: 1180px;
       margin: 0 auto;
     }
 
     .hero,
+    .tool-section,
     .section,
     .faq,
     .cta-panel {
@@ -107,29 +112,45 @@
       border-radius: var(--radius);
       background: var(--card);
       box-shadow: var(--shadow);
-      padding: clamp(20px, 4vw, 42px);
       margin-bottom: 28px;
     }
 
     .hero {
+      position: relative;
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 24px;
-      align-items: center;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+      gap: clamp(22px, 4vw, 48px);
+      align-items: stretch;
+      padding: clamp(28px, 5vw, 54px);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 260px;
+      height: 260px;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      background: var(--warning);
+      opacity: 0.22;
+      pointer-events: none;
     }
 
     .eyebrow {
       display: inline-flex;
       width: fit-content;
-      margin-bottom: 12px;
-      padding: 7px 10px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
       border: 2px solid var(--line);
       border-radius: 999px;
       background: var(--warning);
       color: var(--ink);
       font-size: 0.78rem;
       font-weight: 1000;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.055em;
       text-transform: uppercase;
     }
 
@@ -141,69 +162,213 @@
     }
 
     h1 {
-      max-width: 780px;
-      margin-bottom: 14px;
-      font-size: clamp(2.6rem, 7vw, 6rem);
-      line-height: 0.88;
-      letter-spacing: -0.08em;
+      max-width: 760px;
+      margin-bottom: 16px;
+      font-size: clamp(3.3rem, 8vw, 7.4rem);
+      line-height: 0.82;
+      letter-spacing: -0.09em;
     }
 
     h2 {
       margin-bottom: 12px;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      line-height: 0.98;
-      letter-spacing: -0.05em;
+      font-size: clamp(2rem, 4.6vw, 3.6rem);
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 1.15rem;
     }
 
     p {
       color: var(--muted);
-      font-weight: 750;
+      font-weight: 760;
     }
 
     .lead {
-      max-width: 760px;
-      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      max-width: 740px;
+      margin-bottom: 0;
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      line-height: 1.38;
     }
 
-    .stat-card {
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 52px;
+      padding: 0.9rem 1.15rem;
       border: 3px solid var(--line);
-      border-radius: 20px;
-      background: #111111;
-      color: #ffffff;
-      padding: 22px;
+      border-radius: 16px;
+      background: var(--warning);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 1000;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-small);
+      transition: transform 120ms ease, box-shadow 120ms ease;
     }
 
-    .stat-card strong {
+    .button:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 var(--line);
+    }
+
+    .button.secondary {
+      background: #fff8e7;
+    }
+
+    .button.danger {
+      background: var(--danger);
+      color: var(--ink);
+    }
+
+    .hero-panel {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      align-self: stretch;
+    }
+
+    .panic-card {
+      border: 3px solid var(--line);
+      border-radius: 24px;
+      background: #111111;
+      color: #fff8e7;
+      padding: clamp(20px, 3vw, 28px);
+      box-shadow: var(--shadow-small);
+    }
+
+    .panic-card strong {
       display: block;
       margin-bottom: 8px;
       color: var(--warning);
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 0.9;
-      letter-spacing: -0.06em;
+      font-size: clamp(3.1rem, 7vw, 5.2rem);
+      line-height: 0.86;
+      letter-spacing: -0.075em;
     }
 
-    .stat-card span {
-      color: #d7d1c8;
+    .panic-card span {
+      color: #e8ddc7;
       font-weight: 900;
+      font-size: 1.02rem;
     }
 
-    .widget-wrap {
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini-stat {
       border: 3px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 18px;
+      background: #fff8e7;
+      padding: 15px;
+      box-shadow: 4px 4px 0 var(--line);
+    }
+
+    .mini-stat strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .mini-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .warning-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 3px solid var(--line);
+      border-radius: 18px;
+      background: var(--danger);
+      padding: 14px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-small);
+    }
+
+    .warning-strip span {
+      font-size: 1.4rem;
+    }
+
+    .tool-section {
       background: #111111;
-      box-shadow: var(--shadow);
-      padding: clamp(10px, 2vw, 18px);
-      margin-bottom: 28px;
+      padding: clamp(16px, 2.5vw, 24px);
+      overflow: hidden;
+    }
+
+    .tool-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 14px;
+      color: #fff8e7;
+    }
+
+    .tool-header h2 {
+      margin-bottom: 0;
+      color: #fff8e7;
+      font-size: clamp(1.7rem, 3vw, 2.6rem);
+      letter-spacing: -0.045em;
+    }
+
+    .tool-header p {
+      max-width: 430px;
+      margin-bottom: 0;
+      color: #d7d1c8;
+      font-size: 0.98rem;
+    }
+
+    .iframe-shell {
+      border: 3px solid var(--line);
+      border-radius: 22px;
+      background: #fff8e7;
+      padding: clamp(8px, 1.8vw, 14px);
+      overflow: hidden;
     }
 
     iframe {
       display: block;
       width: 100%;
       max-width: 940px;
-      height: 980px;
+      height: 540px;
       margin: 0 auto;
       border: 0;
       background: transparent;
+    }
+
+    .tool-note {
+      margin: 14px 4px 0;
+      color: #d7d1c8;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .section,
+    .faq,
+    .cta-panel {
+      padding: clamp(22px, 4vw, 42px);
     }
 
     .grid {
@@ -214,26 +379,27 @@
 
     .tile {
       border: 3px solid var(--line);
-      border-radius: 18px;
+      border-radius: 20px;
       background: #f6efe4;
       padding: 18px;
+      box-shadow: 4px 4px 0 var(--line);
     }
 
     .tile strong {
       display: block;
       margin-bottom: 8px;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
     }
 
     ul {
       margin: 0;
       padding-left: 1.25rem;
       color: var(--muted);
-      font-weight: 750;
+      font-weight: 760;
     }
 
     li {
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.7rem;
     }
 
     .cta-panel {
@@ -247,38 +413,6 @@
 
     .cta-panel p {
       color: #d7d1c8;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.9rem 1.1rem;
-      border: 3px solid var(--line);
-      border-radius: 16px;
-      background: var(--warning);
-      color: var(--ink);
-      text-decoration: none;
-      font-weight: 1000;
-      text-transform: uppercase;
-      box-shadow: 5px 5px 0 #fff8e7;
-      transition: transform 120ms ease, box-shadow 120ms ease;
-    }
-
-    .button.secondary {
-      background: #fff8e7;
-    }
-
-    .button:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 7px 7px 0 #fff8e7;
     }
 
     details {
@@ -307,18 +441,56 @@
       text-align: center;
     }
 
-    @media (max-width: 860px) {
-      .hero,
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        grid-template-rows: auto;
+      }
+
+      .tool-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
       .grid {
         grid-template-columns: 1fr;
       }
 
       iframe {
-        height: 1120px;
+        height: 620px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 12px;
       }
 
-      body {
-        padding: 14px;
+      .hero,
+      .section,
+      .faq,
+      .cta-panel {
+        border-radius: 20px;
+        box-shadow: 6px 6px 0 var(--line);
+      }
+
+      h1 {
+        font-size: clamp(3rem, 17vw, 4.7rem);
+      }
+
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      iframe {
+        height: 690px;
+      }
+
+      .button {
+        width: 100%;
       }
     }
   </style>
@@ -331,28 +503,70 @@
         <span class="eyebrow">Startup cashflow triage</span>
         <h1>Find your runway before the room gets smaller.</h1>
         <p class="lead">
-          The Burn Rate Runway Extender helps founders estimate how many months of cash they have left,
-          identify when funding conversations should start, and turn vague panic into a calendar-backed action point.
+          Stop using hope as a financial model. Estimate your cash runway, spot the danger zone,
+          and turn “we should probably look at funding” into an actual decision before the bank account starts coughing blood.
         </p>
 
         <div class="button-row">
-          <a class="button" href="#calculator">Run the calculator</a>
+          <a class="button danger" href="#calculator">Run the calculator</a>
           <a class="button secondary" href="./embed.html">Embed this tool</a>
         </div>
       </div>
 
-      <div class="stat-card">
-        <strong>60 sec</strong>
-        <span>Enter cash, expenses, and revenue. Get estimated runway and a calendar-ready review prompt.</span>
-      </div>
+      <aside class="hero-panel" aria-label="Runway urgency snapshot">
+        <div class="panic-card">
+          <strong>60 sec</strong>
+          <span>Enter cash, expenses, and revenue. Get your estimated runway and a calendar-ready review prompt.</span>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <strong>&lt; 3 mo</strong>
+            <span>Red zone</span>
+          </div>
+          <div class="mini-stat">
+            <strong>3–6 mo</strong>
+            <span>Move now</span>
+          </div>
+          <div class="mini-stat">
+            <strong>6+ mo</strong>
+            <span>Protect runway</span>
+          </div>
+          <div class="mini-stat">
+            <strong>.ics</strong>
+            <span>Calendar artifact</span>
+          </div>
+        </div>
+
+        <div class="warning-strip">
+          <span>⚠</span>
+          <div>Cash math ignored becomes business gravity.</div>
+        </div>
+      </aside>
     </section>
 
-    <section id="calculator" class="widget-wrap" aria-label="Burn Rate Runway Extender calculator">
-      <iframe
-        src="https://burn-rate-runway-widget.vercel.app/?source=landing_page&campaign=startup_runway"
-        title="Burn Rate Runway Extender"
-        loading="lazy">
-      </iframe>
+    <section id="calculator" class="tool-section" aria-label="Burn Rate Runway Extender calculator">
+      <div class="tool-header">
+        <div>
+          <span class="eyebrow">Run the numbers</span>
+          <h2>Your burn rate does not care about your pitch deck.</h2>
+        </div>
+        <p>
+          Use the calculator below, then download the review invite so the funding conversation gets a date — not a dusty “later.”
+        </p>
+      </div>
+
+      <div class="iframe-shell">
+        <iframe
+          src="https://burn-rate-runway-widget.vercel.app/?source=landing_page&campaign=startup_runway"
+          title="Burn Rate Runway Extender"
+          loading="lazy">
+        </iframe>
+      </div>
+
+      <p class="tool-note">
+        The embed is intentionally compact here. For partner sites and Wix articles, use the iframe settings on the embed page.
+      </p>
     </section>
 
     <section class="section">
@@ -400,7 +614,7 @@
 
       <div class="button-row">
         <a
-          class="button"
+          class="button danger"
           href="https://bankbreezy.com/funding/jason?utm_source=runway_landing&utm_medium=landing_page&utm_campaign=startup_runway"
           target="_blank"
           rel="noopener noreferrer">
