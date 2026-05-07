@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Burn Rate Runway Extender widget: calculate your startup runway and generate a death date calendar invite." />
+  <title>Burn Rate Runway Extender</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="widget-shell" aria-labelledby="widget-title">
+    <section class="hero-card">
+      <div class="eyebrow">60-second cashflow triage</div>
+      <h1 id="widget-title">Stop guessing. Run the numbers.</h1>
+      <p class="subhead">If the math says you’re bleeding, you fix it now — not after the next denial.</p>
+
+      <form id="runway-form" class="calculator" novalidate>
+        <div class="field-grid">
+          <label class="field">
+            <span>Current Cash on Hand</span>
+            <div class="money-input">
+              <span aria-hidden="true">$</span>
+              <input id="cash" name="cash" type="number" inputmode="decimal" min="0" step="0.01" placeholder="50000" required />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Monthly Expenses</span>
+            <div class="money-input">
+              <span aria-hidden="true">$</span>
+              <input id="expenses" name="expenses" type="number" inputmode="decimal" min="0" step="0.01" placeholder="15000" required />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Monthly Revenue</span>
+            <div class="money-input">
+              <span aria-hidden="true">$</span>
+              <input id="revenue" name="revenue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="5000" required />
+            </div>
+          </label>
+        </div>
+
+        <button class="primary-button" type="submit">Calculate my death date</button>
+        <p id="form-error" class="form-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="results" class="results-card is-hidden" aria-live="polite">
+      <div class="result-topline">
+        <div>
+          <div class="eyebrow">Your estimated runway</div>
+          <h2><span id="months-out">0.0</span> months</h2>
+        </div>
+        <div id="status-pill" class="status-pill">Calculating</div>
+      </div>
+
+      <div class="death-date">
+        <span>Estimated death date</span>
+        <strong id="death-date-out">—</strong>
+      </div>
+
+      <div class="metrics-grid">
+        <div>
+          <span>Net monthly burn</span>
+          <strong id="net-burn-out">$0</strong>
+        </div>
+        <div>
+          <span>Daily burn</span>
+          <strong id="daily-burn-out">$0</strong>
+        </div>
+        <div>
+          <span>Cash position</span>
+          <strong id="cash-out">$0</strong>
+        </div>
+      </div>
+
+      <div class="artifact-card">
+        <div>
+          <h3>Artifact: Death Date Calendar Invite</h3>
+          <p>Put the pressure on the calendar. Money math ignored becomes a funeral procession with nicer fonts.</p>
+        </div>
+        <button id="calendar-button" class="secondary-button" type="button">Download .ics invite</button>
+      </div>
+
+      <div id="scenario-note" class="scenario-note"></div>
+
+      <div class="cta-grid">
+        <a class="cta-card cta-primary" href="https://bankbreezy.com/funding/jason" target="_blank" rel="noopener noreferrer">
+          <span>CTA #1</span>
+          <strong>Get Same-Day Instant Funding</strong>
+        </a>
+        <a class="cta-card" href="https://tally.so/r/w4R2Ad" target="_blank" rel="noopener noreferrer">
+          <span>CTA #2</span>
+          <strong>Funding for Any Reason</strong>
+        </a>
+      </div>
+    </section>
+
+    <p class="disclaimer">Estimates only. Terms depend on underwriting / eligibility.</p>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
