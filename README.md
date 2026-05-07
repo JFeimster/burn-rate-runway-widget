@@ -1,5 +1,9 @@
 # Burn Rate Runway Extender Widget
 
+<img width="848" height="504" alt="Image" src="https://github.com/user-attachments/assets/2438815d-1502-482c-b742-658bbed6f273" />
+
+---
+
 A deploy-ready static iframe widget that helps founders calculate their estimated runway, understand monthly burn, and generate a calendar-ready funding review prompt before cash pressure turns into business gravity.
 
 Built for:
