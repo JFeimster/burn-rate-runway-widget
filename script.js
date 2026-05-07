@@ -18,6 +18,33 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric"
 });
 
+function getSafeParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get(name);
+  if (!value) return "";
+  return value.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80);
+}
+
+function appendTracking(url) {
+  const next = new URL(url);
+  const partner = getSafeParam("partner");
+  const source = getSafeParam("source");
+  const campaign = getSafeParam("campaign");
+
+  if (partner) next.searchParams.set("utm_partner", partner);
+  if (source) next.searchParams.set("utm_source", source);
+  if (campaign) next.searchParams.set("utm_campaign", campaign);
+
+  return next.toString();
+}
+
+function hydrateTrackedLinks() {
+  const instant = document.getElementById("cta-instant");
+  const anyReason = document.getElementById("cta-any-reason");
+  if (instant) instant.href = appendTracking(instant.href);
+  if (anyReason) anyReason.href = appendTracking(anyReason.href);
+}
+
 function getNumber(id) {
   const value = Number(document.getElementById(id).value);
   return Number.isFinite(value) ? value : 0;
@@ -42,12 +69,12 @@ function escapeICS(text) {
 }
 
 function buildICS(result) {
-  const start = result.deathDate;
+  const start = new Date(result.cashoutDate);
   start.setHours(14, 0, 0, 0);
   const end = new Date(start);
   end.setHours(14, 30, 0, 0);
 
-  const summary = "Death Date: Runway Review";
+  const summary = "Runway Review: Funding Action Check";
   const description = [
     "Burn Rate Runway Extender estimate.",
     `Cash on hand: ${money.format(result.cash)}`,
@@ -56,8 +83,8 @@ function buildICS(result) {
     `Net monthly burn: ${money.format(result.netBurn)}`,
     `Estimated runway: ${result.months.toFixed(1)} months`,
     "",
-    "CTA: Get Same-Day Instant Funding - https://bankbreezy.com/funding/jason",
-    "CTA: Funding for Any Reason - https://tally.so/r/w4R2Ad",
+    `CTA: Get Same-Day Instant Funding - ${document.getElementById("cta-instant").href}`,
+    `CTA: Funding for Any Reason - ${document.getElementById("cta-any-reason").href}`,
     "",
     "Disclaimer: Estimates only. Terms depend on underwriting / eligibility."
   ].join("\n");
@@ -65,7 +92,7 @@ function buildICS(result) {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Burn Rate Runway Extender//Death Date Invite//EN",
+    "PRODID:-//Burn Rate Runway Extender//Runway Review Invite//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
@@ -87,7 +114,7 @@ function downloadICS() {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "death-date-runway-review.ics";
+  anchor.download = "runway-review-funding-action-check.ics";
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
@@ -124,7 +151,7 @@ function calculate(event) {
   const revenue = getNumber("revenue");
 
   if (cash <= 0) {
-    errorEl.textContent = "Enter your cash on hand. Zero cash means the death date is already holding the shovel.";
+    errorEl.textContent = "Enter your cash on hand. Zero cash means the runway review is already overdue.";
     results.classList.add("is-hidden");
     return;
   }
@@ -139,7 +166,7 @@ function calculate(event) {
   const dailyBurn = netBurn > 0 ? netBurn / 30.4375 : 0;
   const months = netBurn > 0 ? cash / netBurn : Infinity;
   const days = netBurn > 0 ? Math.floor(months * 30.4375) : 3650;
-  const deathDate = addDays(new Date(), days);
+  const cashoutDate = addDays(new Date(), days);
 
   latestResult = {
     cash,
@@ -148,11 +175,11 @@ function calculate(event) {
     netBurn: Math.max(netBurn, 0),
     months: Number.isFinite(months) ? months : 120,
     dailyBurn,
-    deathDate
+    cashoutDate
   };
 
   document.getElementById("months-out").textContent = Number.isFinite(months) ? months.toFixed(1) : "∞";
-  document.getElementById("death-date-out").textContent = netBurn > 0 ? dateFormatter.format(deathDate) : "No death date at current burn";
+  document.getElementById("cashout-date-out").textContent = netBurn > 0 ? dateFormatter.format(cashoutDate) : "No cash-out date at current burn";
   document.getElementById("net-burn-out").textContent = netBurn > 0 ? money.format(netBurn) : "$0";
   document.getElementById("daily-burn-out").textContent = netBurn > 0 ? money.format(dailyBurn) : "$0";
   document.getElementById("cash-out").textContent = money.format(cash);
@@ -171,13 +198,13 @@ function calculate(event) {
   setStatus(months, netBurn);
   results.classList.remove("is-hidden");
 
-  // Helps parent pages that listen for iframe resize messages.
   window.parent?.postMessage({
     type: "burn-rate-runway-extender:height",
     height: document.documentElement.scrollHeight
   }, "*");
 }
 
+hydrateTrackedLinks();
 form.addEventListener("submit", calculate);
 calendarButton.addEventListener("click", downloadICS);
 
