@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Static iframe widget for calculating startup burn rate runway and generating a death date calendar invite.",
+  "deploymentRefresh": "2026-05-07T21:07:00Z",
   "scripts": {
     "dev": "serve .",
     "start": "serve ."
