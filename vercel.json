@@ -48,7 +48,25 @@
       ]
     },
     {
+      "source": "/embed",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/landing.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/landing",
       "headers": [
         {
           "key": "Cache-Control",
@@ -93,16 +111,6 @@
     {
       "source": "/calculator",
       "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/embed",
-      "destination": "/embed.html",
-      "permanent": false
-    },
-    {
-      "source": "/landing",
-      "destination": "/landing.html",
       "permanent": false
     }
   ]
