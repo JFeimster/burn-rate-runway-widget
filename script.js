@@ -38,16 +38,27 @@ function appendTracking(url) {
   return next.toString();
 }
 
+function getLinkByIdOrHref(id, hrefPart) {
+  return document.getElementById(id) || document.querySelector(`a[href*="${hrefPart}"]`);
+}
+
 function hydrateTrackedLinks() {
-  const instant = document.getElementById("cta-instant");
-  const anyReason = document.getElementById("cta-any-reason");
+  const instant = getLinkByIdOrHref("cta-instant", "bankbreezy.com/funding/jason");
+  const anyReason = getLinkByIdOrHref("cta-any-reason", "tally.so/r/w4R2Ad");
+
   if (instant) instant.href = appendTracking(instant.href);
   if (anyReason) anyReason.href = appendTracking(anyReason.href);
 }
 
 function getNumber(id) {
-  const value = Number(document.getElementById(id).value);
+  const input = document.getElementById(id);
+  const value = Number(input?.value);
   return Number.isFinite(value) ? value : 0;
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.textContent = value;
 }
 
 function addDays(date, days) {
@@ -74,6 +85,11 @@ function buildICS(result) {
   const end = new Date(start);
   end.setHours(14, 30, 0, 0);
 
+  const instant = getLinkByIdOrHref("cta-instant", "bankbreezy.com/funding/jason");
+  const anyReason = getLinkByIdOrHref("cta-any-reason", "tally.so/r/w4R2Ad");
+  const instantUrl = instant?.href || appendTracking("https://bankbreezy.com/funding/jason");
+  const anyReasonUrl = anyReason?.href || appendTracking("https://tally.so/r/w4R2Ad");
+
   const summary = "Runway Review: Funding Action Check";
   const description = [
     "Burn Rate Runway Extender estimate.",
@@ -83,8 +99,8 @@ function buildICS(result) {
     `Net monthly burn: ${money.format(result.netBurn)}`,
     `Estimated runway: ${result.months.toFixed(1)} months`,
     "",
-    `CTA: Get Same-Day Instant Funding - ${document.getElementById("cta-instant").href}`,
-    `CTA: Funding for Any Reason - ${document.getElementById("cta-any-reason").href}`,
+    `CTA: Get Same-Day Instant Funding - ${instantUrl}`,
+    `CTA: Funding for Any Reason - ${anyReasonUrl}`,
     "",
     "Disclaimer: Estimates only. Terms depend on underwriting / eligibility."
   ].join("\n");
@@ -123,6 +139,8 @@ function downloadICS() {
 
 function setStatus(months, netBurn) {
   const pill = document.getElementById("status-pill");
+  if (!pill) return;
+
   pill.className = "status-pill";
 
   if (netBurn <= 0) {
@@ -178,21 +196,26 @@ function calculate(event) {
     cashoutDate
   };
 
-  document.getElementById("months-out").textContent = Number.isFinite(months) ? months.toFixed(1) : "∞";
-  document.getElementById("cashout-date-out").textContent = netBurn > 0 ? dateFormatter.format(cashoutDate) : "No cash-out date at current burn";
-  document.getElementById("net-burn-out").textContent = netBurn > 0 ? money.format(netBurn) : "$0";
-  document.getElementById("daily-burn-out").textContent = netBurn > 0 ? money.format(dailyBurn) : "$0";
-  document.getElementById("cash-out").textContent = money.format(cash);
+  const cashoutDateText = netBurn > 0 ? dateFormatter.format(cashoutDate) : "No cash-out date at current burn";
+
+  setText("months-out", Number.isFinite(months) ? months.toFixed(1) : "∞");
+  setText("death-date-out", cashoutDateText);
+  setText("cashout-date-out", cashoutDateText);
+  setText("net-burn-out", netBurn > 0 ? money.format(netBurn) : "$0");
+  setText("daily-burn-out", netBurn > 0 ? money.format(dailyBurn) : "$0");
+  setText("cash-out", money.format(cash));
 
   const note = document.getElementById("scenario-note");
-  if (netBurn <= 0) {
-    note.textContent = "Revenue covers expenses. Beautiful. Keep cash reserves high and do not let optimism hire a marching band.";
-  } else if (months < 3) {
-    note.textContent = "Under 3 months of runway. This is not a vibe check. Cut burn, collect receivables, and pursue funding immediately.";
-  } else if (months < 6) {
-    note.textContent = "Less than 6 months. You still have options, but the room is getting smaller. Move before underwriting says no.";
-  } else {
-    note.textContent = "You have breathing room. Protect it. Review weekly, trim waste, and keep funding options warm before you need them.";
+  if (note) {
+    if (netBurn <= 0) {
+      note.textContent = "Revenue covers expenses. Beautiful. Keep cash reserves high and do not let optimism hire a marching band.";
+    } else if (months < 3) {
+      note.textContent = "Under 3 months of runway. This is not a vibe check. Cut burn, collect receivables, and pursue funding immediately.";
+    } else if (months < 6) {
+      note.textContent = "Less than 6 months. You still have options, but the room is getting smaller. Move before underwriting says no.";
+    } else {
+      note.textContent = "You have breathing room. Protect it. Review weekly, trim waste, and keep funding options warm before you need them.";
+    }
   }
 
   setStatus(months, netBurn);
@@ -205,8 +228,14 @@ function calculate(event) {
 }
 
 hydrateTrackedLinks();
-form.addEventListener("submit", calculate);
-calendarButton.addEventListener("click", downloadICS);
+
+if (form) {
+  form.addEventListener("submit", calculate);
+}
+
+if (calendarButton) {
+  calendarButton.addEventListener("click", downloadICS);
+}
 
 window.addEventListener("load", () => {
   window.parent?.postMessage({
